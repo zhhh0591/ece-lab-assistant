@@ -1,0 +1,6 @@
+# This repo is a log for now. Data files do not belong here.*.jsonl
+*.xlsx
+boards*
+results*
+profiles*
+.DS_Store
