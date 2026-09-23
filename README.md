@@ -10,3 +10,4 @@ inventory system, and other tools will go here as they're ready.
 One file per day in `log/`.
 
 - [2026-09-21](log/2026-09-21.md) - starting the board testing task
+- [2026-09-22](log/2026-09-22.md) - identifying the boards, testing the first one
