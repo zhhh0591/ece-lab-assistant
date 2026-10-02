@@ -38,10 +38,15 @@ OLED SSD1306 128×64 at `0x3C`. STM32 link 115200 8N1.
 ## Phase A — solo self-test  (built, works on one board)
 
 ```bash
-# once per board, from Arduino IDE: flash selftest/selftest.ino
+./flash.sh                     # once per board -- build settings pinned in the script
 python3 selftest.py --list
 python3 selftest.py --id ECE-0101 --tester HZ
 ```
+
+On an Apple-silicon Mac, Arduino's `ctags` (used to compile any new or changed sketch)
+is an Intel binary. Without Rosetta the build stops with `bad CPU type in executable`;
+an unchanged sketch only keeps building because its old result is cached. Fix:
+`softwareupdate --install-rosetta`.
 
 Checks ESP32 identity/cores, flash size, PSRAM, I2C bus, OLED init, the STM32 `AT?`
 link, and a WiFi scan to exercise the 2.4 GHz chain. Writes PASS/FAIL into
@@ -59,21 +64,57 @@ Makerfabs' battery demo reads GPIO4, but on this variant GPIO4 is I2C_SDA, so th
 is wrong here and the right one is undocumented — put a meter on the battery pads
 instead of guessing.
 
-## Phase B — ranging  (procedure; script it after it works by hand)
+## Phase B — ranging  (scripted; tested against a simulated board, not a real pair yet)
 
-Ranging cannot be tested on one board. Minimum is a pair.
+Ranging cannot be tested on one board. One board is the fixed reference (anchor A0);
+every other board takes a turn as the tag (T0) against it.
 
-1. Flash board 1 with Makerfabs' example as **ANCHOR**, `UWB_INDEX 0`, `FREQ_850K`
-   (850 k is more robust than 6.8 M; use it until things work).
-2. Flash board 2 as **TAG**, `UWB_INDEX 0`, same rate.
-3. Set them on non-metallic supports, **antennas at the same height**, clear line of
-   sight, at least 1 m from walls and metal. Multipath will dominate anything you do
-   in a cluttered lab bench and you will blame the board.
-4. Tape-measure a known distance. Read `AT+RANGE` lines off the tag.
-5. Record **reported vs actual**. That pair is now your reference.
+```bash
+./flash.sh bridge                                     # every board, for this phase
+python3 ranging.py anchor --id ECE-0101               # once: make the reference
+python3 ranging.py tag --id ECE-0102 --ref ECE-0101 --distance 2.00 --tester HZ
+```
 
-Then sweep the other 8 against board 1. Any board that cannot range at all is a real
-failure; a board that ranges with an offset is a calibration problem, not a fault.
+`bridge/bridge.ino` makes the ESP32 a wire between USB and the STM32, so `ranging.py`
+sends the AT commands itself (Makerfabs AT Command Manual v1.1.2): `AT?`, `AT+RESTORE`,
+`AT+SETCFG`, `AT+SETCAP`, `AT+SETRPT=1`, `AT+SAVE`, `AT+RESTART`, then reads the
+settings back. Role and index are never compiled in, unlike Makerfabs' `esp32_at.ino`
+— one firmware for all ten. Before configuring anything it asks the bridge for the
+board's MAC and checks it against `boards.csv`; the wrong board on the port stops the run.
+
+**Setup**
+
+1. Reference anchor at one fixed spot for the whole batch: non-metallic support,
+   **antennas at the same height**, clear line of sight, at least 1 m from walls and
+   metal. Multipath will dominate anything you do on a cluttered lab bench and you
+   will blame the board. After `ranging.py anchor` it can run from any USB charger —
+   the role is saved in the module.
+2. Tape-measure antenna to antenna, mark the tag's spot, and use the same mark and
+   orientation for every board.
+3. Power only the anchor and the board under test. Every board under test is T0.
+
+**What PASS means:** at least 10 distances to A0 in the 15 s window — the board ranges.
+That is the only gate. The offset (reported − tape) is recorded and printed beside the
+other boards measured against the same reference, but never judged: these boards read
+about half a metre long until calibrated (the review below measured 50–61 cm), and that
+is a calibration number, not a fault.
+
+A FAIL with **no reports at all** is most often the anchor being off or out of reach,
+and the script says so. Check the anchor and re-run; a passing re-run clears the
+script's own entry in `boards.csv` (it never touches the self-test's entries).
+
+**Firmware differences it handles.** The range line changed between firmware versions:
+older ones end with `rssi:(...)` and slot *i* is anchor *i*; v1.1.6 ends with
+`ancid:(...)` and any slot can hold any anchor. `AT+SETCAP` took 2 fields before
+v1.1.1 and 3 after, so the script asks `AT+GETCAP?` first and answers in the same shape.
+
+**Not confirmed on hardware yet**, so the first real pair tests the test, the way board
+1 did for the self-test: how long the module needs after `AT+RESTORE` and `AT+RESTART`,
+whether a tag with no anchor in reach prints empty reports or nothing, and whether the
+module echoes commands. If the first good board FAILs, suspect the script first.
+
+Every run, with all its raw readings, goes to `../../ranging.jsonl` (gitignored — it
+is lab equipment data).
 
 ## Phase C — calibration
 
@@ -83,7 +124,8 @@ can be tens of centimetres. An independent review of this exact board fitted
 `actual = m × reported + b` and got m ≈ 1.0089, b ≈ −61.2 — a large constant term.
 
 So: measure each board at several known distances (50 cm, 1 m, 2 m, 3 m, 5 m), fit a
-line, store `m` and `b` per board.
+line, store `m` and `b` per board. One `ranging.py tag` run per distance collects the
+data; `ranging.jsonl` keeps every reading for the fit.
 
 **The caveat that matters:** the offset belongs to the *pair*, not to one board — both
 antenna delays add. Two honest options:
@@ -107,7 +149,8 @@ those coefficients for absolute antenna delays.
 3. `selftest.py --id ...` on each. ~30 s per board.
 4. `python3 ../../analyze.py` — with ten identical boards, a repeated signature is a
    batch problem worth chasing, not ten coincidences.
-5. Phase B on the survivors.
+5. Phase B on the survivors: `./flash.sh bridge` on each, `ranging.py anchor` once on
+   the reference, then `ranging.py tag` on each of the others from the same mark.
 
 **Scaling note:** since the interface is USB, a powered 10-port hub tests all ten in
 one pass without touching anything. That is the whole fixture. No pogo pins.
