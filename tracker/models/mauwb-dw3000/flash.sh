@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
-# Flash selftest.ino to one MaUWB_DW3000 board.
+# Flash one MaUWB_DW3000 board.
 #
-#   ./flash.sh                  # auto-detect the port
-#   ./flash.sh /dev/cu.usbserial-0001
+#   ./flash.sh                          # selftest.ino, auto-detect the port
+#   ./flash.sh /dev/cu.usbserial-0001   # selftest.ino on that port
+#   ./flash.sh bridge                   # bridge.ino, for ranging.py (phase B)
+#   ./flash.sh bridge /dev/cu.usbserial-0001
 #
 # The FQBN is pinned here on purpose. Ten boards, one command, zero chance the
 # settings drift between board 1 and board 10 -- PSRAM=enabled in particular is
@@ -12,7 +14,12 @@ set -euo pipefail
 
 FQBN="esp32:esp32:esp32:PSRAM=enabled"
 HERE="$(cd "$(dirname "$0")" && pwd)"
-SKETCH="$HERE/selftest"
+
+NAME=selftest
+case "${1:-}" in
+  selftest|bridge) NAME="$1"; shift ;;
+esac
+SKETCH="$HERE/$NAME"
 
 PORT="${1:-}"
 if [ -z "$PORT" ]; then
@@ -33,14 +40,22 @@ if [ -z "$PORT" ]; then
   fi
 fi
 
-echo "port  $PORT"
-echo "fqbn  $FQBN"
+echo "sketch  $NAME"
+echo "port    $PORT"
+echo "fqbn    $FQBN"
 echo
 
 arduino-cli compile --fqbn "$FQBN" "$SKETCH"
 echo
 arduino-cli upload -p "$PORT" --fqbn "$FQBN" "$SKETCH"
 
+# Quoted, because this folder's path has a space in it and an unquoted copy
+# of the command splits there.
 echo
-echo "Flashed. Now:"
-echo "  python3 $HERE/selftest.py --id <BOARD-ID> --tester <INITIALS>"
+echo "Flashed $NAME. Now:"
+if [ "$NAME" = bridge ]; then
+  echo "  python3 \"$HERE/ranging.py\" anchor --id <REF-ID>     # reference board, once"
+  echo "  python3 \"$HERE/ranging.py\" tag --id <BOARD-ID> --ref <REF-ID> --distance <metres>"
+else
+  echo "  python3 \"$HERE/selftest.py\" --id <BOARD-ID> --tester <INITIALS>"
+fi
