@@ -16,3 +16,4 @@ One file per day in `log/`.
 - [2026-09-23](log/2026-09-23.md) - starting on the lab website
 - [2026-09-29](log/2026-09-29.md) - uploading the self-test tools, studying UWB ranging
 - [2026-10-01](log/2026-10-01.md) - writing the ranging test, trying it on a simulated board
+- [2026-10-02](log/2026-10-02.md) - studying multimeters, bench power supplies and board repair
