@@ -7,3 +7,9 @@ profiles*
 .DS_Store
 __pycache__/
 *.pyc
+
+# Website build output, and the lab photos and manuals it uses (not ours to publish)
+website/dist/
+website/static/img/
+website/static/docs/
+website/lab-site-preview.zip
