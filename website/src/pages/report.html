@@ -1,0 +1,57 @@
+---
+title: Report a problem
+nav: report
+description: Report broken equipment, missing tools, a printer problem or a mistake on this site to the ECE Capstone Lab technicians.
+scripts: forms.js
+---
+<div class="page-head">
+  <div class="wrap">
+    <h1>Report a problem</h1>
+    <p class="lede">A blown meter fuse, a missing tool, a printer acting up, a wrong page on this site. Telling us is how it gets fixed before the next team finds it.</p>
+  </div>
+</div>
+<div class="wrap split">
+  <form class="form-card" id="report-form" data-to="{{site:report_to}}">
+    <fieldset class="field">
+      <legend>What kind of problem?</legend>
+      <div class="radio-row">
+        <label><input type="radio" name="kind" value="Broken equipment" checked> Broken equipment</label>
+        <label><input type="radio" name="kind" value="Missing tool or part"> Missing tool or part</label>
+        <label><input type="radio" name="kind" value="3D printer"> 3D printer</label>
+        <label><input type="radio" name="kind" value="Computer or software"> Computer or software</label>
+        <label><input type="radio" name="kind" value="This website"> This website</label>
+        <label><input type="radio" name="kind" value="Other"> Other</label>
+      </div>
+    </fieldset>
+    <div class="field-row">
+      <div class="field">
+        <label for="rf-equipment">Which equipment?</label>
+        <select id="rf-equipment">{{@equipment_options}}</select>
+      </div>
+      <div class="field">
+        <label for="rf-bench">Bench or machine number <span class="hint">On the toolbox label, e.g. Capstone 4</span></label>
+        <input id="rf-bench" type="text" autocomplete="off">
+      </div>
+    </div>
+    <div class="field">
+      <label for="rf-what">What happened?</label>
+      <span class="hint" id="rf-what-hint">What you were doing, what you expected, what happened instead.</span>
+      <textarea id="rf-what" required aria-describedby="rf-what-hint"></textarea>
+    </div>
+    <div class="field">
+      <label for="rf-name">Your name <span class="hint">Optional, so we can follow up</span></label>
+      <input id="rf-name" type="text" autocomplete="name">
+    </div>
+    <div class="btn-row">
+      <button class="btn" type="submit">Open the email</button>
+      <button class="btn btn-secondary" type="button" id="rf-copy">Copy text for Teams</button>
+    </div>
+    <p class="note" style="margin-top:14px">This opens your own email app with the report filled in, addressed to the lab technicians. Nothing is sent until you press Send there, and this site stores nothing.</p>
+  </form>
+  <aside class="side-card">
+    <h2 style="font-size:1.1rem">Faster for urgent problems</h2>
+    <p>Knock on the door at <strong>the technicians' office</strong>, or message a technician on Teams.</p>
+    <p>For anything that is a danger to people, call NUPD at <a href="tel:+16173733333"><strong>617-373-3333</strong></a>.</p>
+    <a class="text-link" href="{{root}}contact/">All contact details</a>
+  </aside>
+</div>

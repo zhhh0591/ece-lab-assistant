@@ -1,0 +1,78 @@
+---
+title: PCB milling and assembly
+nav: make
+section: Make & Print
+description: Design rules and file names for the LPKF ProtoMat S104 PCB mill, plus a checker for your Gerber and drill files.
+scripts: pcb.js
+reviewed: 2026-10-15
+---
+<div class="page-head">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{root}}make/">Make &amp; Print</a></nav>
+    <h1>PCB milling and assembly</h1>
+    <p class="lede">The LPKF ProtoMat S104 turns your PCB layout into a finished board, ready for parts. Only lab technicians operate the machine: you prepare the files, they mill the board.</p>
+  </div>
+</div>
+<div class="wrap split">
+  <article class="prose">
+    <h2>What the mill can do</h2>
+    <ul>
+      <li>Standard FR4 board with 1 oz copper. <strong>FR4 is free for students.</strong> For any other material, buy it yourself.</li>
+      <li>Single-sided or double-sided boards.</li>
+      <li><strong>No plated through-holes.</strong> To connect top and bottom, thread a wire through a hole or around the board edge.</li>
+      <li>Precision is ±0.1 mm. Keep at least <strong>0.5 mm clearance</strong> around your traces.</li>
+      <li>The largest board that fits in the reflow oven is <strong>8 x 6.5 in (203 x 165 mm)</strong>.</li>
+    </ul>
+    <p>The mill makes traces by cutting away the copper around them, leaving only your circuit paths. Review your layout carefully before you submit it; every mistake costs material and machine time.</p>
+
+    <h2>Files to send</h2>
+    <p>Gerber files (<code>.gbr</code>) are preferred. Other formats, like DXF, often get corrupted on import. A double-sided board needs at least these four files:</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th scope="col">File</th><th scope="col">What it is</th><th scope="col">Put this in the name</th><th scope="col">Example</th></tr></thead>
+        <tbody>
+          <tr><td>Top</td><td>Top copper layer</td><td><code>TOP</code> (capitals)</td><td><code>logic_card_TOP.gbr</code></td></tr>
+          <tr><td>Bottom</td><td>Bottom copper layer</td><td><code>BOT</code></td><td><code>logic_card_BOT.gbr</code></td></tr>
+          <tr><td>Drill</td><td>Every through-hole. <strong>Must be an Excellon file.</strong></td><td><code>DRL</code></td><td><code>logic_card_DRL.drl</code></td></tr>
+          <tr><td>Outline</td><td>The board edge, where it is cut out of the panel</td><td><code>BOA</code></td><td><code>logic_card_BOA.gbr</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>A single-sided board needs one copper layer (TOP or BOT), the drill file and the outline.</p>
+
+    <h2 id="checker">Check your files before you send them</h2>
+    <p>Drop your Gerber and drill files here. The checker reads them in your browser; <strong>nothing is uploaded</strong>. It checks the names, the file types, and the board size against the rules above. It cannot check trace clearance, so still review your layout in your CAD tool.</p>
+    <div class="form-card">
+      <label class="dropzone" id="pcb-drop" for="pcb-files">
+        <strong>Drop files here, or click to choose</strong>
+        <span class="note">.gbr and .drl files. Unzip first if your CAD tool made a .zip.</span>
+        <input id="pcb-files" type="file" multiple class="sr-only">
+      </label>
+      <fieldset class="field" style="margin-top:16px">
+        <legend>Board type</legend>
+        <div class="radio-row">
+          <label><input type="radio" name="sides" value="2" checked> Double-sided</label>
+          <label><input type="radio" name="sides" value="1"> Single-sided</label>
+        </div>
+      </fieldset>
+      <div id="pcb-report" aria-live="polite"></div>
+    </div>
+
+    <h2>Assembly: placement and reflow</h2>
+    <p>For surface-mount boards the lab also has a placement machine and an LPKF ProtoFlow E reflow oven. Ask a technician before using either for the first time.</p>
+
+    <h2>When to use an outside PCB house</h2>
+    <p>The mill can be temperamental. If your schedule has no room for error, consider a quick-turn PCB manufacturer. You pay for it, but you get design feedback, a firm schedule and fast turnaround, and they can make plated through-holes.</p>
+  </article>
+  <aside class="side-card">
+    <figure class="side-photo"><img src="{{root}}static/img/pcb-mill.jpg" alt="The LPKF ProtoMat S104 PCB milling machine under its clear cover" width="800" height="600"></figure>
+    <dl class="facts">
+      <div><dt>Mill</dt><dd>LPKF ProtoMat S104</dd></div>
+      <div><dt>Material</dt><dd>FR4, 1 oz copper (free)</dd></div>
+      <div><dt>Precision</dt><dd>±0.1 mm; keep 0.5 mm clearance</dd></div>
+      <div><dt>Max board for reflow</dt><dd>8 x 6.5 in (203 x 165 mm)</dd></div>
+      <div><dt>Operated by</dt><dd>Lab technicians only</dd></div>
+    </dl>
+    <a class="btn btn-block" href="{{root}}contact/">Send files to a technician</a>
+  </aside>
+</div>

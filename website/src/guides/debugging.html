@@ -1,0 +1,53 @@
+---
+title: Debugging a circuit that does not work
+summary: A checklist that finds most faults, in the order that finds them fastest.
+order: 2
+time: 10 min read
+level: Everyone
+reviewed: 2026-10-15
+---
+<p>Most broken circuits are not mysterious. They are a missing ground, a part in backwards, or a wire one row over. Work through this list in order and stop when you find the fault.</p>
+
+<h2>1. Look before you measure</h2>
+<ul>
+  <li>Compare the board to your schematic, one connection at a time. Tick each wire off on a printout.</li>
+  <li>Check every polarized part: diodes, LEDs, electrolytic capacitors, ICs (find pin 1).</li>
+  <li>On a breadboard, check that the power rails are connected across the middle break. Many boards split each rail into two halves.</li>
+  <li>Look for parts that are hot, discolored, or smell burnt. Turn the power off first if you find one.</li>
+</ul>
+
+<h2>2. Check the power supply</h2>
+<ul>
+  <li>Is the output turned on, and is it the right output?</li>
+  <li>Is the supply in CC (constant current) mode? Then the circuit draws the full limit, which usually means a short. Turn it off and look for it before raising the limit.</li>
+  <li>Measure the supply voltage <strong>at the chip's power pins</strong>, not at the supply terminals. A bad connection in between is common.</li>
+</ul>
+
+<h2>3. Check ground</h2>
+<ul>
+  <li>Every instrument and supply in the circuit must share a ground: supply minus, scope ground clip, generator ground.</li>
+  <li>Measure from the supply's minus terminal to each IC's ground pin with the meter on continuity or resistance (power off). It should read close to 0 Ω.</li>
+</ul>
+
+<h2>4. Follow the signal</h2>
+<ul>
+  <li>Start where the signal enters the circuit and move forward one stage at a time with the scope.</li>
+  <li>At each stage, ask: is the signal what I expected here? The first stage where it is wrong is where the fault is.</li>
+  <li>For long chains, check the middle first. If it is right there, the fault is after it; if not, before it. This halves the search each time.</li>
+</ul>
+
+<h2>5. Check your instruments, not just your circuit</h2>
+<ul>
+  <li>Scope reading 10x off: probe attenuation and channel setting do not match.</li>
+  <li>Signal amplitude double what you set: generator load is 50 Ω, set it to High Z.</li>
+  <li>DC level missing on the scope: the channel is on AC coupling.</li>
+  <li>Meter reads 0 A: blown fuse, or the lead is still in the V jack.</li>
+</ul>
+
+<h2>6. Still stuck?</h2>
+<ul>
+  <li>Swap the suspect part for a known-good one.</li>
+  <li>Rebuild the stage that fails, neatly, with short wires.</li>
+  <li>Explain the circuit out loud to a teammate. You will often hear the mistake yourself.</li>
+  <li>Bring the board and your schematic to a technician in the technicians' office.</li>
+</ul>

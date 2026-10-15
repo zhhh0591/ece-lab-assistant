@@ -1,0 +1,76 @@
+---
+title: 3D printing
+nav: make
+section: Make & Print
+description: Rules, PrusaSlicer settings and live video for the two Prusa MK4 printers in the ECE Capstone Lab.
+reviewed: 2026-10-15
+---
+<div class="page-head">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{root}}make/">Make &amp; Print</a></nav>
+    <h1>3D printing</h1>
+    <p class="lede">Two Prusa MK4 printers, PRUSA_3D_1 and PRUSA_3D_2. PLA only. You run your own print, so read these rules first.</p>
+  </div>
+</div>
+<div class="wrap split">
+  <article class="prose">
+    <h2>The rules</h2>
+    <ol>
+      <li><strong>If you think a printer is not working properly, put a note on the machine</strong> and report it on Teams to a technician, or knock on the door of the technicians' office. You can also use the <a href="{{root}}report/?equipment=3d-printer">report form</a>.</li>
+      <li>If you are unsure how to use the machine, <strong>ask first</strong>. Contact a technician or knock at the technicians' office.</li>
+      <li>Slice with <strong>PrusaSlicer</strong>, using the settings below.</li>
+      <li><strong>Use only PLA filament.</strong></li>
+      <li><strong>Check on your print as often as you can</strong> to make sure it is running properly. The live video below helps.</li>
+      <li>Take care of the machines. Do not force, bend or adjust any part of the printer by hand. Future students will need them for their capstone projects too.</li>
+    </ol>
+
+    <h2>PrusaSlicer settings</h2>
+    <p>Start from the default settings and set or confirm these:</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th scope="col">Setting</th><th scope="col">Value</th></tr></thead>
+        <tbody>
+          <tr><td>Printer</td><td>Original Prusa MK4</td></tr>
+          <tr><td>Nozzle</td><td>0.4 mm</td></tr>
+          <tr><td>Material</td><td>PLA</td></tr>
+          <tr><td>Bed (table) temperature</td><td>70 °C, first layer and all other layers</td></tr>
+          <tr><td>Nozzle temperature</td><td>205 °C, first layer and all other layers</td></tr>
+          <tr><td>Infill</td><td>15%. This is enough for every design.</td></tr>
+          <tr><td>Volume and speed settings</td><td><strong>Do not change</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Watch your print live</h2>
+    <p>Each printer streams video, and several people can watch at once. You need to be on the campus network or the VPN.</p>
+    <ol>
+      <li>Install <a href="https://www.videolan.org/vlc/">VLC media player</a> on your PC or Mac.</li>
+      <li>In VLC, open <strong>Media → Open Network Stream</strong> (on a Mac: <strong>File → Open Network</strong>).</li>
+      <li>Paste the address for your printer and press Play.</li>
+    </ol>
+    {{@printer_streams}}
+
+    <h2>Tips for a print that works</h2>
+    <ul>
+      <li>Export your part as STL or 3MF from your CAD tool.</li>
+      <li>Watch the first layer. Most failed prints fail there.</li>
+      <li>Parts with large overhangs need supports. Turn them on in PrusaSlicer, or rotate the part so it needs fewer.</li>
+      <li>Do not touch the print sheet with your fingers. Oil makes prints come loose.</li>
+      <li>Let the sheet cool, then flex it gently to release the print.</li>
+    </ul>
+  </article>
+  <aside class="side-card">
+    <figure class="side-photo"><img src="{{root}}static/img/prusa-printers.jpg" alt="Two Prusa MK4 3D printers side by side on a bench" width="800" height="600"></figure>
+    <dl class="facts">
+      <div><dt>Printers</dt><dd>2x Prusa MK4</dd></div>
+      <div><dt>Material</dt><dd>PLA only</dd></div>
+      <div><dt>Slicer</dt><dd>PrusaSlicer</dd></div>
+    </dl>
+    <ul class="res-list">
+      <li><a href="{{root}}static/docs/basics-of-3d-printing.pdf">Basics of 3D printing</a> <span class="badge">PDF</span></li>
+      <li><a href="https://www.prusa3d.com/downloads/manual/prusa3d_manual_MK4_MK39_103_en.pdf">Prusa MK4 manual</a> <span class="badge">PDF</span></li>
+      <li><a href="https://help.prusa3d.com/">Prusa Knowledge Base</a></li>
+    </ul>
+    <a class="btn btn-secondary btn-block" href="{{root}}report/?equipment=3d-printer">Report a printer problem</a>
+  </aside>
+</div>

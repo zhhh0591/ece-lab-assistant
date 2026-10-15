@@ -1,0 +1,542 @@
+{
+  "_readme": "One entry per kind of equipment. Each one becomes a page at equipment/<id>/ and a QR label on equipment/labels.html. Models come from the current lab site and photos; set verify to false once someone has checked the entry against the real bench. Links starting with {{root}} point inside this site.",
+  "categories": [
+    "Bench instruments",
+    "Fabrication",
+    "Hand tools",
+    "Computing",
+    "Batteries"
+  ],
+  "items": [
+    {
+      "id": "oscilloscope",
+      "name": "Oscilloscope",
+      "category": "Bench instruments",
+      "model": "Agilent / Keysight DSO6012A, 100 MHz, 2 channels",
+      "verify": false,
+      "location": "Every bench",
+      "image": "oscilloscope.jpg",
+      "image_alt": "The Agilent DSO6012A oscilloscope front panel",
+      "summary": "Shows voltage over time. Use it to see a signal's shape, frequency and timing.",
+      "quick_start": [
+        "Connect the probe to channel 1. Clip the ground lead to circuit ground, and only to ground.",
+        "Check the probe's attenuation switch. Lab probes are usually 10:1, and the channel's probe setting must match or every reading is off by 10x.",
+        "Press Default Setup, then AutoScale, for a starting picture.",
+        "Adjust volts per division and time per division until one or two periods fill the screen.",
+        "Move the trigger level into the signal's range so the waveform stops drifting.",
+        "Use Quick Meas for frequency, peak-to-peak and RMS instead of counting grid squares."
+      ],
+      "mistakes": [
+        "AC coupling removes the DC part of a signal. Leave the channel on DC coupling unless you mean to hide an offset.",
+        "The ground clip is tied to earth ground through the scope's power cord. Clipping it to any node that is not ground shorts that node to earth.",
+        "If square waves look rounded or overshoot, compensate the probe on the scope's probe-comp output first.",
+        "A long ground lead rings on fast edges. Use the short ground spring when edges are fast."
+      ],
+      "safety": [
+        "Do not measure mains voltage with a bench scope and a standard probe."
+      ],
+      "links": [
+        {
+          "label": "DSO6000 series manual (PDF)",
+          "url": "{{root}}static/docs/dso6000-scope-manual.pdf"
+        },
+        {
+          "label": "Agilent 6000 series user's guide (PDF)",
+          "url": "{{root}}static/docs/dso6000-users-guide.pdf"
+        },
+        {
+          "label": "DSO6012A at Keysight",
+          "url": "https://www.keysight.com/us/en/product/DSO6012A/oscilloscope-100-mhz-2-analog-channels.html"
+        }
+      ],
+      "tags": [
+        "scope",
+        "probe",
+        "waveform",
+        "trigger",
+        "keysight",
+        "agilent",
+        "dso6012a"
+      ]
+    },
+    {
+      "id": "power-supply",
+      "name": "DC power supply",
+      "category": "Bench instruments",
+      "model": "Agilent / Keysight E3647A, dual output, 60 W",
+      "verify": false,
+      "location": "Every bench",
+      "image": "power-supply.jpg",
+      "image_alt": "The Agilent E3647A dual-output power supply, with output 1 and output 2 terminals",
+      "summary": "Two adjustable DC outputs with a current limit to protect your circuit.",
+      "quick_start": [
+        "Turn the output off before connecting anything.",
+        "Pick the voltage range with the Low or High range key: up to 35 V at 0.8 A, or up to 60 V at 0.5 A.",
+        "Set the voltage first. Then set the current limit a little above what your circuit should draw.",
+        "Connect + to your supply rail and - to circuit ground. The separate green or earth terminal is chassis ground, not circuit ground.",
+        "Turn the output on and watch the current reading.",
+        "If the supply switches to CC (constant current), the circuit is drawing the full limit. Turn the output off and look for a short."
+      ],
+      "mistakes": [
+        "Raising the current limit to make CC go away burns parts. CC means something is wrong.",
+        "Every supply and instrument in one circuit needs a shared ground connection.",
+        "The display shows one output at a time. Check which output you are adjusting before you turn the knob."
+      ],
+      "safety": [
+        "Do not connect the two outputs in series or parallel unless the manual says how for this supply."
+      ],
+      "links": [
+        {
+          "label": "E3647A manual (PDF)",
+          "url": "{{root}}static/docs/e3647a-power-supply-manual.pdf"
+        },
+        {
+          "label": "E3647A at Keysight",
+          "url": "https://www.keysight.com/us/en/support/E3647A/60w-dual-output-power-supply-two-35v-8a-60v-0-5a.html"
+        }
+      ],
+      "tags": [
+        "psu",
+        "supply",
+        "voltage",
+        "current limit",
+        "cc",
+        "cv",
+        "keysight",
+        "agilent",
+        "e3647a"
+      ]
+    },
+    {
+      "id": "function-generator",
+      "name": "Function generator",
+      "category": "Bench instruments",
+      "model": "Agilent / Keysight 33220A, 20 MHz function and arbitrary waveform",
+      "verify": false,
+      "location": "Every bench",
+      "image": "function-generator.jpg",
+      "image_alt": "The Agilent 33220A function generator, with its Output connector on the right",
+      "summary": "Produces sine, square, ramp, pulse and arbitrary signals to drive a circuit.",
+      "quick_start": [
+        "Pick the waveform, then set frequency, amplitude and offset.",
+        "Check the amplitude unit. It can be shown as Vpp, Vrms or dBm.",
+        "Set the output load (see below), then press Output to turn the signal on."
+      ],
+      "mistakes": [
+        "The generator assumes a 50 ohm load by default. Into a high-impedance input, like a scope or most circuits, the real voltage is twice what the display says. In the Utility menu, open Output Setup and set the load to High Z so the display matches.",
+        "The output stays off until you press Output, even when the screen shows a waveform."
+      ],
+      "safety": [],
+      "links": [
+        {
+          "label": "33220A manual (PDF)",
+          "url": "{{root}}static/docs/33220a-function-generator-manual.pdf"
+        },
+        {
+          "label": "33220A at Keysight",
+          "url": "https://www.keysight.com/us/en/product/33220A/function--arbitrary-waveform-generator-20-mhz.html"
+        }
+      ],
+      "tags": [
+        "signal generator",
+        "awg",
+        "sine",
+        "square",
+        "high z",
+        "keysight",
+        "agilent",
+        "33220a"
+      ]
+    },
+    {
+      "id": "multimeter",
+      "name": "Digital multimeter",
+      "category": "Bench instruments",
+      "model": "Fluke 45 dual-display bench meter",
+      "verify": false,
+      "location": "Every bench",
+      "image": "multimeter.jpg",
+      "image_alt": "The Fluke 45 dual-display multimeter, with V-ohm, 10 A, COM and 100 mA jacks",
+      "summary": "Measures voltage, current, resistance and continuity, and can show two readings at once.",
+      "quick_start": [
+        "Voltage: red lead in the V jack, black in COM, probes across the part (in parallel).",
+        "Current: move the red lead to the 100 mA jack (or 10 A for larger currents), then break the circuit and put the meter in series.",
+        "Resistance: power the circuit off first. For an exact value, lift one leg of the part out of the circuit.",
+        "Continuity: the meter beeps when the two probes are connected through a low resistance."
+      ],
+      "mistakes": [
+        "A meter set to current is close to a short circuit. Putting it across a voltage source blows its fuse.",
+        "After measuring current, move the red lead back to the V jack.",
+        "Resistance readings on a powered circuit are wrong and can damage the meter."
+      ],
+      "safety": [
+        "If a meter reads zero on current, the fuse may be blown. Report it rather than leaving it on the bench."
+      ],
+      "links": [
+        {
+          "label": "Fluke 45 introduction (PDF)",
+          "url": "{{root}}static/docs/fluke45-intro.pdf"
+        },
+        {
+          "label": "Fluke 45 manual (PDF)",
+          "url": "{{root}}static/docs/fluke45-manual.pdf"
+        }
+      ],
+      "tags": [
+        "dmm",
+        "meter",
+        "voltage",
+        "current",
+        "resistance",
+        "continuity",
+        "fuse",
+        "fluke"
+      ]
+    },
+    {
+      "id": "soldering-station",
+      "name": "Soldering station",
+      "category": "Fabrication",
+      "model": "TODO: station model",
+      "verify": true,
+      "location": "Soldering bench, under the fume hood",
+      "image": "soldering-station.jpg",
+      "image_alt": "The soldering bench with irons, a magnifier, a fume hood arm and parts trays",
+      "summary": "For through-hole and surface-mount work on boards and wires.",
+      "quick_start": [
+        "Turn on the ducted fume hood and put on eye protection.",
+        "Inspect the iron and cord for damage before you start.",
+        "Use the station's preset temperature unless you have a reason to change it.",
+        "Tin the tip: melt a little solder on it so it conducts heat well.",
+        "Heat the pad and the component lead together for a second or two, then feed solder into the joint, not onto the iron.",
+        "A good joint is shiny and shaped like a small cone. A dull ball means it needs more heat.",
+        "Put the iron back in its holder every time you let go of it, and switch it off when you are done."
+      ],
+      "mistakes": [
+        "Carrying solder to the joint on the iron gives a cold joint. Heat the joint and let it melt the solder.",
+        "Holding the iron too long lifts pads off the board."
+      ],
+      "safety": [
+        "Wear eye protection. Solder can spit.",
+        "Use the ducted hood to vent fumes.",
+        "Use rosin-free and lead-free solder whenever possible.",
+        "Keep cleaning solvents in their dispensing bottles.",
+        "Wash your hands with soap and water after soldering.",
+        "Never touch the hot parts of the iron, and never leave it lying on the bench."
+      ],
+      "links": [
+        {
+          "label": "Safety rules for the whole lab",
+          "url": "{{root}}safety/"
+        }
+      ],
+      "tags": [
+        "solder",
+        "iron",
+        "flux",
+        "fume hood",
+        "smd"
+      ]
+    },
+    {
+      "id": "3d-printer",
+      "name": "3D printers",
+      "category": "Fabrication",
+      "model": "2x Prusa MK4 (PRUSA_3D_1 and PRUSA_3D_2)",
+      "verify": false,
+      "location": "In the lab",
+      "image": "prusa-printers.jpg",
+      "image_alt": "Two Prusa MK4 3D printers side by side on a bench",
+      "summary": "Prints PLA enclosures, mounts and brackets for capstone projects. Watch your print live from your laptop.",
+      "quick_start": [
+        "Slice your part in PrusaSlicer with the lab settings: MK4, 0.4 mm nozzle, PLA.",
+        "Read the full rules and settings on the 3D printing page before your first print."
+      ],
+      "mistakes": [
+        "Changing speed or volume settings in the slicer. Leave them at the defaults."
+      ],
+      "safety": [
+        "The nozzle and bed are hot. Keep hands out while the printer is moving."
+      ],
+      "links": [
+        {
+          "label": "3D printing rules, settings and live video",
+          "url": "{{root}}make/3d-printing/"
+        },
+        {
+          "label": "Basics of 3D printing (PDF)",
+          "url": "{{root}}static/docs/basics-of-3d-printing.pdf"
+        },
+        {
+          "label": "Prusa MK4 manual (PDF, prusa3d.com)",
+          "url": "https://www.prusa3d.com/downloads/manual/prusa3d_manual_MK4_MK39_103_en.pdf"
+        }
+      ],
+      "tags": [
+        "prusa",
+        "mk4",
+        "print",
+        "pla",
+        "slicer",
+        "stl",
+        "3mf"
+      ]
+    },
+    {
+      "id": "pcb-mill",
+      "name": "PCB milling machine",
+      "category": "Fabrication",
+      "model": "LPKF ProtoMat S104",
+      "verify": false,
+      "location": "In the lab",
+      "image": "pcb-mill.jpg",
+      "image_alt": "The LPKF ProtoMat S104 PCB milling machine under its clear cover, next to its control PC",
+      "summary": "Turns your Gerber files into a single- or double-sided FR4 board. Operated by lab technicians only.",
+      "quick_start": [
+        "Prepare TOP, BOT, DRL and BOA files, named as the PCB page explains.",
+        "Check them with the PCB file checker on this site.",
+        "Send them to a lab technician. Students do not run the machine."
+      ],
+      "mistakes": [
+        "Expecting plated through-holes. The mill cannot make them; thread a wire through the hole instead.",
+        "Sending DXF instead of Gerber. DXF often imports corrupted."
+      ],
+      "safety": [],
+      "links": [
+        {
+          "label": "PCB milling rules and file checker",
+          "url": "{{root}}make/pcb/"
+        }
+      ],
+      "tags": [
+        "lpkf",
+        "protomat",
+        "s104",
+        "gerber",
+        "pcb",
+        "mill",
+        "excellon"
+      ]
+    },
+    {
+      "id": "placement-machine",
+      "name": "Placement machine",
+      "category": "Fabrication",
+      "model": "TODO: model",
+      "verify": true,
+      "location": "In the lab",
+      "image": "placement-machine.jpg",
+      "image_alt": "A manual pick-and-place machine with a blue arm over a copper board",
+      "summary": "Helps place surface-mount parts accurately before reflow.",
+      "quick_start": [
+        "Ask a lab technician before using it for the first time."
+      ],
+      "mistakes": [],
+      "safety": [],
+      "links": [
+        {
+          "label": "PCB tools overview",
+          "url": "{{root}}make/pcb/"
+        }
+      ],
+      "tags": [
+        "pick and place",
+        "smd",
+        "smt",
+        "lpkf"
+      ]
+    },
+    {
+      "id": "reflow-oven",
+      "name": "Reflow oven",
+      "category": "Fabrication",
+      "model": "LPKF ProtoFlow E",
+      "verify": true,
+      "location": "In the lab",
+      "image": "reflow-oven.jpg",
+      "image_alt": "The LPKF ProtoFlow E reflow oven with heat-resistant gloves beside it",
+      "summary": "Solders surface-mount boards. The largest board that fits is 8 x 6.5 in (203 x 165 mm).",
+      "quick_start": [
+        "Ask a lab technician before using it for the first time."
+      ],
+      "mistakes": [
+        "Designing a board larger than 8 x 6.5 in if you plan to reflow it here."
+      ],
+      "safety": [
+        "Boards come out hot. Use the heat-resistant gloves."
+      ],
+      "links": [
+        {
+          "label": "PCB tools overview",
+          "url": "{{root}}make/pcb/"
+        }
+      ],
+      "tags": [
+        "reflow",
+        "oven",
+        "smd",
+        "solder paste",
+        "lpkf",
+        "protoflow"
+      ]
+    },
+    {
+      "id": "poster-plotter",
+      "name": "Poster printer",
+      "category": "Fabrication",
+      "model": "HP large-format printer (TODO: model)",
+      "verify": true,
+      "location": "Run by lab technicians",
+      "image": "poster-plotter.jpg",
+      "image_alt": "An HP large-format poster printer on a stand",
+      "summary": "Free printing of capstone trifold posters. Email the PDF; pick it up in the technicians' office.",
+      "quick_start": [
+        "Email your final PDF to the poster printing address with its dimensions.",
+        "Pick the print up in the technicians' office, usually within 2 days."
+      ],
+      "mistakes": [
+        "Sending a draft. Only send the final version."
+      ],
+      "safety": [],
+      "links": [
+        {
+          "label": "Poster printing: write the email",
+          "url": "{{root}}make/posters/"
+        }
+      ],
+      "tags": [
+        "poster",
+        "trifold",
+        "plotter",
+        "print",
+        "email"
+      ]
+    },
+    {
+      "id": "lab-computers",
+      "name": "Lab computers and printer",
+      "category": "Computing",
+      "model": "Dell desktops; HP network printer",
+      "verify": true,
+      "location": "Every bench",
+      "image": "lab-computer.jpg",
+      "image_alt": "A Dell desktop with a monitor, keyboard and mouse on a lab bench",
+      "summary": "Bench PCs for design tools, instrument control and programming boards.",
+      "quick_start": [
+        "Sign in with your Northeastern account (TODO: confirm).",
+        "Save your work to your own cloud storage. Local files may be wiped.",
+        "For help with computers or software, go to the technicians' office or message a technician on Teams."
+      ],
+      "mistakes": [
+        "Leaving files only on the desktop. Treat the bench PC as temporary."
+      ],
+      "safety": [],
+      "links": [
+        {
+          "label": "Contact the technicians",
+          "url": "{{root}}contact/"
+        }
+      ],
+      "tags": [
+        "pc",
+        "dell",
+        "software",
+        "login",
+        "printer",
+        "network printer"
+      ]
+    },
+    {
+      "id": "bench-toolbox",
+      "name": "Bench toolbox",
+      "category": "Hand tools",
+      "model": "One per bench, labeled with the bench number",
+      "verify": false,
+      "location": "Every bench",
+      "image": "bench-toolbox.jpg",
+      "image_alt": "A black and yellow toolbox labeled Capstone 4",
+      "summary": "The hand tools every bench should have. Put them back before you leave.",
+      "contents": [
+        "1 needle-nose pliers",
+        "1 diagonal cutters",
+        "1 wire strippers, 30-20 AWG",
+        "1 hand crimp tool",
+        "1 slip-joint pliers",
+        "Screwdriver set, 4 pieces, flat and Phillips",
+        "Hex key set, metric and inch, 30 pieces",
+        "Precision screwdriver set, 6 pieces, flat and Phillips"
+      ],
+      "quick_start": [
+        "Check the box against the list when you start. Report anything missing."
+      ],
+      "mistakes": [],
+      "safety": [],
+      "links": [],
+      "tags": [
+        "tools",
+        "pliers",
+        "cutters",
+        "strippers",
+        "crimp",
+        "screwdriver",
+        "hex key"
+      ]
+    },
+    {
+      "id": "shared-toolbox",
+      "name": "Shared tool cabinet",
+      "category": "Hand tools",
+      "model": "Red rolling tool cabinet",
+      "verify": false,
+      "location": "In the lab",
+      "image": "shared-toolbox.jpg",
+      "image_alt": "A tall red rolling tool cabinet with many drawers",
+      "summary": "Larger and less common tools, and lab supplies. Ask a technician.",
+      "quick_start": [
+        "For tools and lab supplies, knock on the door at the technicians' office, or message a technician on Teams."
+      ],
+      "mistakes": [],
+      "safety": [],
+      "links": [
+        {
+          "label": "Contact the technicians",
+          "url": "{{root}}contact/"
+        }
+      ],
+      "tags": [
+        "tools",
+        "cabinet",
+        "supplies"
+      ]
+    },
+    {
+      "id": "charging-stations",
+      "name": "Battery charging stations",
+      "category": "Batteries",
+      "model": "Hobby battery chargers on fire-resistant charging boxes",
+      "verify": true,
+      "location": "In the lab",
+      "image": "charging-stations.jpg",
+      "image_alt": "Three battery chargers sitting on fire-resistant charging boxes, with charging leads and a printed rules sign",
+      "summary": "Charge project batteries safely. Read the charger manual first.",
+      "quick_start": [
+        "Read the charger's instruction manual before your first charge.",
+        "If you need a longer or balance-charging cable, ask the technicians."
+      ],
+      "mistakes": [],
+      "safety": [
+        "Do not modify, customize or alter any cables or connectors.",
+        "Do not leave batteries charging or connected over the weekend.",
+        "If you have any questions, go to the technicians' office for help."
+      ],
+      "links": [],
+      "tags": [
+        "battery",
+        "lipo",
+        "charger",
+        "xt60",
+        "balance"
+      ]
+    }
+  ]
+}

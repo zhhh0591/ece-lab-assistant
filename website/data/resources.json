@@ -1,0 +1,42 @@
+{
+  "_readme": "Every document and outside link in one place. Local files live in static/docs/ (recreated by import_assets.py).",
+  "groups": [
+    {
+      "title": "Instrument manuals",
+      "items": [
+        {"label": "Oscilloscope, DSO6000 series manual", "url": "{{root}}static/docs/dso6000-scope-manual.pdf", "note": "DSO6012A"},
+        {"label": "Oscilloscope, Agilent 6000 series user's guide", "url": "{{root}}static/docs/dso6000-users-guide.pdf", "note": "Was on the old server but not linked from its homepage"},
+        {"label": "Power supply, E3647A manual", "url": "{{root}}static/docs/e3647a-power-supply-manual.pdf", "note": ""},
+        {"label": "Function generator, 33220A manual", "url": "{{root}}static/docs/33220a-function-generator-manual.pdf", "note": ""},
+        {"label": "Multimeter, Fluke 45 introduction", "url": "{{root}}static/docs/fluke45-intro.pdf", "note": ""},
+        {"label": "Multimeter, Fluke 45 manual", "url": "{{root}}static/docs/fluke45-manual.pdf", "note": ""}
+      ]
+    },
+    {
+      "title": "3D printing",
+      "items": [
+        {"label": "Basics of 3D printing", "url": "{{root}}static/docs/basics-of-3d-printing.pdf", "note": "18 MB"},
+        {"label": "Prusa MK4 printer manual", "url": "https://www.prusa3d.com/downloads/manual/prusa3d_manual_MK4_MK39_103_en.pdf", "note": "prusa3d.com"},
+        {"label": "Prusa Knowledge Base", "url": "https://help.prusa3d.com/", "note": "Troubleshooting guides"}
+      ]
+    },
+    {
+      "title": "Manufacturer pages",
+      "items": [
+        {"label": "DSO6012A oscilloscope", "url": "https://www.keysight.com/us/en/product/DSO6012A/oscilloscope-100-mhz-2-analog-channels.html", "note": "keysight.com"},
+        {"label": "E3647A power supply", "url": "https://www.keysight.com/us/en/support/E3647A/60w-dual-output-power-supply-two-35v-8a-60v-0-5a.html", "note": "keysight.com"},
+        {"label": "33220A function generator", "url": "https://www.keysight.com/us/en/product/33220A/function--arbitrary-waveform-generator-20-mhz.html", "note": "keysight.com"}
+      ]
+    },
+    {
+      "title": "Capstone and Northeastern",
+      "items": [
+        {"label": "ECE Capstone", "url": "https://ece.northeastern.edu/academics/undergraduate-studies/ece-capstone/", "note": "Department page"},
+        {"label": "Makerspaces honor code", "url": "https://makerspaces.northeastern.edu/honor-code/", "note": "Applies in this lab"},
+        {"label": "Northeastern Makerspaces", "url": "https://makerspaces.northeastern.edu/", "note": "Other spaces, training and hours"},
+        {"label": "Emergency information", "url": "https://www.northeastern.edu/emergency-information", "note": ""},
+        {"label": "Digital accessibility", "url": "https://digital-accessibility.northeastern.edu/", "note": "Report an accessibility barrier on this site"}
+      ]
+    }
+  ]
+}

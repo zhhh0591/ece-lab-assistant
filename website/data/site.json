@@ -1,0 +1,155 @@
+{
+  "_readme": "Site-wide settings. Any value containing TODO is highlighted on every page while draft is true, and listed at the end of each build, so nothing unconfirmed can go live looking official.",
+  "draft": true,
+  "use_global_elements": true,
+  "base_url": "http://lab-server.example/",
+  "lab_name": "ECE Makerspace & Capstone Laboratory",
+  "short_name": "Capstone Lab",
+  "department": "Electrical and Computer Engineering",
+  "college": "College of Engineering",
+  "room": "Room not listed in the public copy",
+  "help_room": "Technicians' office",
+  "report_to": "lab-technicians@example.edu",
+  "poster_email": "poster-printing@example.edu",
+  "staff": [
+    {
+      "name": "Lab Technician 1",
+      "role": "Lab Technician",
+      "email": "technician1@example.edu",
+      "office": "Technicians' office"
+    },
+    {
+      "name": "Lab Technician 2",
+      "role": "Lab Technician",
+      "email": "technician2@example.edu",
+      "office": "Technicians' office"
+    },
+    {
+      "name": "Lab Technician 3",
+      "role": "Lab Technician",
+      "email": "technician3@example.edu",
+      "office": "Technicians' office"
+    }
+  ],
+  "emergency": [
+    {
+      "label": "NUPD emergency",
+      "number": "617-373-3333"
+    },
+    {
+      "label": "NUPD non-emergency",
+      "number": "617-373-2121"
+    }
+  ],
+  "printer_streams": [
+    {
+      "printer": "PRUSA_3D_1",
+      "url": "srt://printer-camera.example:7110"
+    },
+    {
+      "printer": "PRUSA_3D_2",
+      "url": "srt://printer-camera.example:7120"
+    }
+  ],
+  "nav": [
+    {
+      "id": "equipment",
+      "label": "Equipment",
+      "href": "equipment/"
+    },
+    {
+      "id": "make",
+      "label": "Make & Print",
+      "href": "make/"
+    },
+    {
+      "id": "guides",
+      "label": "Guides",
+      "href": "guides/"
+    },
+    {
+      "id": "tools",
+      "label": "Calculators",
+      "href": "tools/"
+    },
+    {
+      "id": "safety",
+      "label": "Safety",
+      "href": "safety/"
+    },
+    {
+      "id": "faq",
+      "label": "FAQ",
+      "href": "faq/"
+    },
+    {
+      "id": "contact",
+      "label": "Contact",
+      "href": "contact/"
+    },
+    {
+      "id": "report",
+      "label": "Report a problem",
+      "href": "report/"
+    }
+  ],
+  "hours": {
+    "_readme": "24-hour times, Boston time. Several ranges per day are fine. Closures override the weekly schedule.",
+    "verified": false,
+    "weekly": {
+      "mon": [
+        [
+          "09:00",
+          "17:00"
+        ]
+      ],
+      "tue": [
+        [
+          "09:00",
+          "17:00"
+        ]
+      ],
+      "wed": [
+        [
+          "09:00",
+          "17:00"
+        ]
+      ],
+      "thu": [
+        [
+          "09:00",
+          "17:00"
+        ]
+      ],
+      "fri": [
+        [
+          "09:00",
+          "17:00"
+        ]
+      ],
+      "sat": [],
+      "sun": []
+    },
+    "closures": [
+      {
+        "date": "2026-11-25",
+        "label": "Thanksgiving break"
+      },
+      {
+        "date": "2026-11-26",
+        "label": "Thanksgiving break"
+      },
+      {
+        "date": "2026-11-27",
+        "label": "Thanksgiving break"
+      }
+    ]
+  },
+  "announcements": [
+    {
+      "date": "2026-10-15",
+      "title": "Preview of a new lab website",
+      "body": "Same information as the current site, plus equipment quick-starts, a PCB file checker, calculators and search. Tell the technicians what is wrong or missing."
+    }
+  ]
+}

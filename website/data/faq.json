@@ -1,0 +1,42 @@
+{
+  "_readme": "Questions grouped by topic. Answers may contain links; {{root}} points at the top of this site.",
+  "groups": [
+    {
+      "topic": "Using the lab",
+      "items": [
+        {"q": "Who can use the lab?", "a": "TODO: confirm who has access (capstone teams only, or any ECE student) and whether a card swipe is needed."},
+        {"q": "Who do I ask for help?", "a": "Knock on the door at the technicians' office. If nobody answers, message a technician on Teams (preferred) or email them. Names are on the <a href=\"{{root}}contact/\">Contact</a> page."},
+        {"q": "Can I eat or drink in the lab?", "a": "No. No food or drink in the lab."},
+        {"q": "A tool is missing from my bench toolbox.", "a": "Check the box against the <a href=\"{{root}}equipment/bench-toolbox/\">toolbox list</a>, then <a href=\"{{root}}report/\">report what is missing</a>."},
+        {"q": "Can I take equipment out of the lab?", "a": "TODO: confirm the loan policy for instruments and tools."},
+        {"q": "Where do I get parts and lab supplies?", "a": "Ask the technicians in the technicians' office. TODO: confirm whether there is a parts request process or a stock list."}
+      ]
+    },
+    {
+      "topic": "Making things",
+      "items": [
+        {"q": "How do I get my poster printed?", "a": "Email the final PDF and its dimensions to the poster printing address. It is free for capstone trifold posters and is usually ready in the technicians' office within 2 days. The <a href=\"{{root}}make/posters/\">poster page</a> writes the email for you."},
+        {"q": "Can I run the PCB mill myself?", "a": "No. Only lab technicians operate the LPKF mill. Send them your files; the <a href=\"{{root}}make/pcb/\">PCB page</a> has a checker for them."},
+        {"q": "Can the mill make plated through-holes or vias?", "a": "No. Connect top and bottom layers by threading a wire through a hole or around the board edge."},
+        {"q": "Can I print with PETG or another filament?", "a": "No. Only PLA is allowed on the lab printers."},
+        {"q": "Can I watch my 3D print from somewhere else?", "a": "Yes. Each printer has a video stream you can open in VLC on the campus network. See <a href=\"{{root}}make/3d-printing/\">3D printing</a>."}
+      ]
+    },
+    {
+      "topic": "My measurement looks wrong",
+      "items": [
+        {"q": "My scope reads 10 times too high or too low.", "a": "The probe's 1x/10x switch and the channel's probe setting do not match. Set both to the same value. See the <a href=\"{{root}}equipment/oscilloscope/\">oscilloscope page</a>."},
+        {"q": "My function generator puts out twice the voltage I set.", "a": "It is set for a 50 ohm load but driving a high-impedance input. Set the load to High Z. See the <a href=\"{{root}}equipment/function-generator/\">function generator page</a>."},
+        {"q": "My multimeter reads zero on the current setting.", "a": "The fuse is probably blown, usually from measuring across a source in current mode. Use another meter and <a href=\"{{root}}report/\">report it</a>."},
+        {"q": "My power supply shows CC and the voltage dropped.", "a": "Your circuit is drawing the full current limit. Turn the output off and look for a short or a part in backwards before raising the limit."},
+        {"q": "My circuit worked yesterday and does not work today.", "a": "Work through the <a href=\"{{root}}guides/debugging/\">debugging checklist</a>, starting with power and ground."}
+      ]
+    },
+    {
+      "topic": "Access",
+      "items": [
+        {"q": "This site will not load from home.", "a": "It is only reachable on the campus network. Connect the Northeastern GlobalProtect VPN first. See <a href=\"{{root}}guides/remote-access/\">Remote access</a>."}
+      ]
+    }
+  ]
+}

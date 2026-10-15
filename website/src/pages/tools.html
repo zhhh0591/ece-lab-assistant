@@ -1,0 +1,99 @@
+---
+title: Calculators
+nav: tools
+description: Resistor color code, Ohm's law, voltage divider, LED resistor, RC filter and standard resistor value calculators for ECE students.
+scripts: tools.js
+---
+<div class="page-head">
+  <div class="wrap">
+    <h1>Calculators</h1>
+    <p class="lede">The numbers you need at the bench. Type values with SI prefixes, like <code>4.7k</code>, <code>10u</code> or <code>2.2M</code>. Everything runs in your browser.</p>
+  </div>
+</div>
+<div class="wrap">
+  <nav class="calc-jump" aria-label="Calculators on this page">
+    <a class="chip" href="#resistor">Resistor color code</a>
+    <a class="chip" href="#ohm">Ohm's law</a>
+    <a class="chip" href="#divider">Voltage divider</a>
+    <a class="chip" href="#led">LED resistor</a>
+    <a class="chip" href="#rc">RC filter</a>
+    <a class="chip" href="#eseries">Standard values</a>
+  </nav>
+
+  <noscript><p class="callout">These calculators need JavaScript turned on.</p></noscript>
+
+  <div class="calc-grid">
+    <section class="calc" id="resistor" aria-labelledby="resistor-h">
+      <h2 id="resistor-h">Resistor color code</h2>
+      <p class="hint">Pick the bands from left to right. The tolerance band is usually set apart from the others.</p>
+      <fieldset class="field">
+        <legend class="sr-only">Number of bands</legend>
+        <div class="radio-row">
+          <label><input type="radio" name="rc-bands" value="4" checked> 4 bands</label>
+          <label><input type="radio" name="rc-bands" value="5"> 5 bands</label>
+        </div>
+      </fieldset>
+      <div class="bands" id="rc-preview" aria-hidden="true"></div>
+      <div class="band-row" id="rc-selects"></div>
+      <div class="calc-result" id="rc-out" aria-live="polite"></div>
+      <h3 class="h-small">Or go the other way</h3>
+      <div class="field">
+        <label for="rc-value">Resistance</label>
+        <input id="rc-value" type="text" placeholder="e.g. 4.7k" autocomplete="off">
+      </div>
+      <div class="calc-result" id="rc-rev" aria-live="polite"></div>
+    </section>
+
+    <section class="calc" id="ohm" aria-labelledby="ohm-h">
+      <h2 id="ohm-h">Ohm's law and power</h2>
+      <p class="hint">Fill in any two. The other values are worked out.</p>
+      <div class="field-row">
+        <div class="field"><label for="ohm-v">Voltage (V)</label><input id="ohm-v" type="text" placeholder="5" autocomplete="off"></div>
+        <div class="field"><label for="ohm-i">Current (A)</label><input id="ohm-i" type="text" placeholder="20m" autocomplete="off"></div>
+        <div class="field"><label for="ohm-r">Resistance (Ω)</label><input id="ohm-r" type="text" placeholder="220" autocomplete="off"></div>
+      </div>
+      <div class="calc-result" id="ohm-out" aria-live="polite"></div>
+    </section>
+
+    <section class="calc" id="divider" aria-labelledby="divider-h">
+      <h2 id="divider-h">Voltage divider</h2>
+      <p class="hint">V<sub>out</sub> is taken across R2, the resistor to ground. Assumes nothing else loads the output.</p>
+      <div class="field-row">
+        <div class="field"><label for="dv-vin">V<sub>in</sub> (V)</label><input id="dv-vin" type="text" value="5" autocomplete="off"></div>
+        <div class="field"><label for="dv-r1">R1 (Ω)</label><input id="dv-r1" type="text" value="10k" autocomplete="off"></div>
+        <div class="field"><label for="dv-r2">R2 (Ω)</label><input id="dv-r2" type="text" value="4.7k" autocomplete="off"></div>
+      </div>
+      <div class="calc-result" id="dv-out" aria-live="polite"></div>
+      <div class="field" style="margin-top:14px"><label for="dv-target">Need a specific V<sub>out</sub>? <span class="hint">Keeps R1 and suggests a standard R2</span></label><input id="dv-target" type="text" placeholder="3.3" autocomplete="off"></div>
+      <div class="calc-result" id="dv-suggest" aria-live="polite"></div>
+    </section>
+
+    <section class="calc" id="led" aria-labelledby="led-h">
+      <h2 id="led-h">LED series resistor</h2>
+      <p class="hint">Typical forward voltage: red about 2.0 V, green 2.1 to 3.2 V, blue and white about 3.0 to 3.3 V. Check the datasheet.</p>
+      <div class="field-row">
+        <div class="field"><label for="led-vs">Supply (V)</label><input id="led-vs" type="text" value="5" autocomplete="off"></div>
+        <div class="field"><label for="led-vf">LED V<sub>f</sub> (V)</label><input id="led-vf" type="text" value="2" autocomplete="off"></div>
+        <div class="field"><label for="led-if">LED current (A)</label><input id="led-if" type="text" value="10m" autocomplete="off"></div>
+      </div>
+      <div class="calc-result" id="led-out" aria-live="polite"></div>
+    </section>
+
+    <section class="calc" id="rc" aria-labelledby="rc-h">
+      <h2 id="rc-h">RC time constant and filter cutoff</h2>
+      <p class="hint">For a first-order RC low-pass or high-pass filter.</p>
+      <div class="field-row">
+        <div class="field"><label for="rcf-r">R (Ω)</label><input id="rcf-r" type="text" value="1k" autocomplete="off"></div>
+        <div class="field"><label for="rcf-c">C (F)</label><input id="rcf-c" type="text" value="100n" autocomplete="off"></div>
+      </div>
+      <div class="calc-result" id="rcf-out" aria-live="polite"></div>
+    </section>
+
+    <section class="calc" id="eseries" aria-labelledby="es-h">
+      <h2 id="es-h">Nearest standard resistor</h2>
+      <p class="hint">E12 (10%), E24 (5%) and E96 (1%) series. The lab is most likely to stock E12 and E24 values.</p>
+      <div class="field"><label for="es-value">Value you calculated (Ω)</label><input id="es-value" type="text" value="3.9k" autocomplete="off"></div>
+      <div class="calc-result" id="es-out" aria-live="polite"></div>
+    </section>
+  </div>
+</div>

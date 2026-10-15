@@ -1,0 +1,81 @@
+---
+title: ECE Makerspace & Capstone Laboratory
+nav: home
+section: Home
+description: Bench instruments, 3D printers, PCB milling and free capstone poster printing for Northeastern ECE students.
+---
+<section class="hero">
+  <img class="hero-img" src="{{root}}static/img/lab-room.jpg" alt="" width="1600" height="917">
+  <div class="wrap hero-inner">
+    <p class="eyebrow" style="color:#fff">Northeastern ECE</p>
+    <h1>ECE Makerspace &amp; Capstone Laboratory</h1>
+    <p class="lede">Bench instruments, 3D printers, PCB milling and free poster printing for ECE capstone teams. Lab technicians are next door in the technicians' office.</p>
+    <div class="btn-row">
+      <a class="btn" href="{{root}}equipment/">Find equipment</a>
+      <a class="btn btn-secondary" href="{{root}}contact/">Get help</a>
+    </div>
+    <div class="status-card" id="lab-status" data-state="unknown" aria-live="polite">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span class="status-text"><strong>Lab hours</strong><span>See the weekly hours below</span></span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><h2>What do you need to do?</h2></div>
+    <ul class="tiles">
+      <li class="tile"><a href="{{root}}guides/getting-started/"><span class="tile-title">First time in the lab</span><span class="tile-desc">Rules, where things are, and who to ask.</span></a></li>
+      <li class="tile"><a href="{{root}}equipment/"><span class="tile-title">Use a bench instrument</span><span class="tile-desc">Quick starts, common mistakes and manuals for the scope, supply, generator and meter.</span></a></li>
+      <li class="tile"><a href="{{root}}make/3d-printing/"><span class="tile-title">Print in 3D</span><span class="tile-desc">Lab rules, PrusaSlicer settings, and live video of your print.</span></a></li>
+      <li class="tile"><a href="{{root}}make/pcb/"><span class="tile-title">Mill a PCB</span><span class="tile-desc">Design rules, file names, and a checker for your Gerber files.</span></a></li>
+      <li class="tile"><a href="{{root}}make/posters/"><span class="tile-title">Print a poster</span><span class="tile-desc">Free trifold posters. Write the email in one step.</span></a></li>
+      <li class="tile"><a href="{{root}}guides/debugging/"><span class="tile-title">Fix a circuit that will not work</span><span class="tile-desc">A step-by-step debugging checklist.</span></a></li>
+      <li class="tile"><a href="{{root}}tools/"><span class="tile-title">Calculate a value</span><span class="tile-desc">Resistor color codes, dividers, LED resistors, RC filters.</span></a></li>
+      <li class="tile"><a href="{{root}}report/"><span class="tile-title">Report something broken</span><span class="tile-desc">A blown fuse, a missing tool, a printer that is acting up.</span></a></li>
+    </ul>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="wrap two-col">
+    <div>
+      <h2>Hours</h2>
+      {{@hours}}
+    </div>
+    <div>
+      <h2>Need help?</h2>
+      <p>Knock on the door at <strong>the technicians' office</strong>. If nobody answers, message a technician on Teams (preferred) or send an email.</p>
+      {{@staff}}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap two-col">
+    <div>
+      <h2>News</h2>
+      {{@announcements}}
+    </div>
+    <div>
+      <h2>Lab rules in brief</h2>
+      <ul>
+        <li>No food or drink in the lab.</li>
+        <li>Follow the <a href="https://makerspaces.northeastern.edu/honor-code/">Makerspaces honor code</a>.</li>
+        <li>Put tools back in your bench toolbox before you leave.</li>
+        <li>Ask before using a machine for the first time.</li>
+        <li>Something broken? Put a note on it and <a href="{{root}}report/">report it</a>.</li>
+      </ul>
+      <p><a class="text-link" href="{{root}}safety/">Safety, first aid and emergency numbers</a></p>
+    </div>
+  </div>
+</section>
+
+<div class="emergency-strip">
+  <div class="wrap">
+    <strong>Emergency:</strong>
+    <span>NUPD <a href="tel:+16173733333">617-373-3333</a></span>
+    <span>Non-emergency <a href="tel:+16173732121">617-373-2121</a></span>
+    <a href="{{root}}safety/">First aid kit location</a>
+  </div>
+</div>
