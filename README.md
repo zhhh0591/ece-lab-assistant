@@ -20,3 +20,4 @@ One file per day in `log/`.
 - [2026-10-12](log/2026-10-12.md) - backing up and auditing the lab website, setting up the new site
 - [2026-10-13](log/2026-10-13.md) - moving the lab site content over, adding student tools
 - [2026-10-14](log/2026-10-14.md) - testing the new site, writing the proposal
+- [2026-10-15](log/2026-10-15.md) - showing the new site preview at the meeting
