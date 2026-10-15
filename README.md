@@ -4,8 +4,9 @@ Northeastern University, ECE Teaching Labs.
 
 Work from this job: a daily log in `log/`, my notes on bench skills in
 `notes/`, and the self-test and ranging test tools for the Makerfabs
-MaUWB_DW3000 boards in `tracker/`. The parts inventory system and other tools
-will go here as they're ready.
+MaUWB_DW3000 boards in `tracker/`, and the new lab website in `website/`
+(see [how to view it](website/README.md#how-to-view-this-site)). The parts
+inventory system and other tools will go here as they're ready.
 
 ## Log
 
