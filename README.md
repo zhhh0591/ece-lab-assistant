@@ -31,3 +31,4 @@ One file per day in `log/`.
 - [2026-10-14](log/2026-10-14.md) - testing the new site, writing the proposal
 - [2026-10-15](log/2026-10-15.md) - showing the new site preview at the meeting
 - [2026-10-22](log/2026-10-22.md) - instrument checks and power-off checks on a new UWB board
+- [2026-10-23](log/2026-10-23.md) - planning the power-up, soldering test points, sorting cabinets
