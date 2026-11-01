@@ -35,3 +35,4 @@ One file per day in `log/`.
 - [2026-10-23](log/2026-10-23.md) - planning the power-up, soldering test points, sorting cabinets
 - [2026-10-28](log/2026-10-28.md) - choosing a XIAO nRF52840 as the USB-C breakout, reading its wiki
 - [2026-10-29](log/2026-10-29.md) - learning to read a schematic, the XIAO's power section
+- [2026-10-30](log/2026-10-30.md) - the USB-C connector contacts and the VBUS net
