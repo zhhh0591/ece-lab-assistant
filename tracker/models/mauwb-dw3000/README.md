@@ -1,156 +1,151 @@
-# MaUWB_DW3000 with STM32 AT Command — 10-board incoming inspection
+# MaUWB_DW3000 test tools
 
-Makerfabs SKU **MAUWBCA1**. PCB silkscreen **"ESP32 AT UWB Pro with Display v1.1"**.
-ESP32-WROVER-B + STM32F103 + Qorvo DW3000. Superseded by the ESP32-S3 version, which
-matters mostly because **most of the code you will find online is for the S3**.
+Makerfabs SKU MAUWBCA1, silkscreen "ESP32 AT UWB Pro with Display v1.1".
+An ESP32-WROVER-B runs our code and sends AT commands over serial to an
+STM32F103, which runs the Qorvo DW3000 UWB radio and reports distances back.
 
 ```
 ESP32-WROVER-B  --UART 115200-->  STM32F103  -->  DW3000 + PA/LNA  -->  antenna
-   your sketch, WiFi/BT,            UWB controller: ranging, time slots,
-   OLED, USB serial                 multi-anchor arbitration
 ```
 
-Two MCUs. You do not write DW3000 drivers — you send the STM32 AT commands and it
-reports distances back.
+Most code online is for the newer ESP32-S3 version, which uses different pins.
 
-## Pin map (WROVER-B variant — verify against this before believing any failure)
+## Once per Mac
 
-| Function | This board | ESP32-S3 version |
-|---|---|---|
-| STM32 RESET | **GPIO 32** | 16 |
-| UART2 RX (ESP32←STM32) | **18** | 18 |
-| UART2 TX (ESP32→STM32) | **19** | 17 |
-| I2C SDA | **4** | 39 |
-| I2C SCL | **5** | 38 |
+- arduino-cli with the `esp32:esp32` board package, and `pip install pyserial`.
+- Apple silicon only: if a build stops with `bad CPU type in executable`, run
+  `softwareupdate --install-rosetta`.
 
-OLED SSD1306 128×64 at `0x3C`. STM32 link 115200 8N1.
+## Test 1: self-test, one board at a time
 
-## Three traps that will make a good board look dead
+1. Plug the board into the Mac with a data cable.
+2. Flash the self-test, once per board:
+   ```bash
+   ./flash.sh
+   ```
+3. Run it:
+   ```bash
+   python3 selftest.py --id MAUWB-001 --tester HZ
+   ```
+4. Watch the OLED: it goes all white for about 1 s, then shows stripes. A dark
+   row or column means a bad screen.
+5. Read the result: one line per check, then PASS or FAIL, then the MAC.
 
-1. **Makerfabs' own `esp32_at.ino` ships with the S3 pins active** and the ESP32 pins
-   commented out, despite the filename. Flash it unchanged on this board and the STM32
-   never answers. Their `serial_test.ino` has the correct ESP32 pins.
-2. **Arduino IDE → Tools → PSRAM must be "Enabled".** Left disabled,
-   `ESP.getPsramSize()` returns 0 and every one of the ten boards reports a PSRAM
-   failure. `selftest.py` says so explicitly rather than just failing.
-3. **Board must be set to "ESP32 Dev Module"**, not any S3 board.
+| Check | What it proves |
+|---|---|
+| ESP32 | the right chip (WROVER-B, 2 cores) |
+| Flash | at least 4 MB |
+| PSRAM | 4 MB (the module has 8 MB; the ESP32 can only map 4 MB) |
+| I2C, OLED | the screen answers at 0x3C and starts up |
+| STM32 | it answers `AT?`, so the UWB side is alive |
+| WiFi | a scan finds networks, so the 2.4 GHz antenna works (a note, not a fail) |
 
-## Phase A — solo self-test  (built, works on one board)
+Not covered: UWB ranging (Test 2) and the battery charger.
 
-```bash
-./flash.sh                     # once per board -- build settings pinned in the script
-python3 selftest.py --list
-python3 selftest.py --id ECE-0101 --tester HZ
-```
+## Test 2: ranging, two boards
 
-On an Apple-silicon Mac, Arduino's `ctags` (used to compile any new or changed sketch)
-is an Intel binary. Without Rosetta the build stops with `bad CPU type in executable`;
-an unchanged sketch only keeps building because its old result is cached. Fix:
-`softwareupdate --install-rosetta`.
+One board stays put as the reference (anchor); every other board takes a turn
+as the tag. Run the self-test first: ranging checks each board's MAC.
 
-Checks ESP32 identity/cores, flash size, PSRAM, I2C bus, OLED init, the STM32 `AT?`
-link, and a WiFi scan to exercise the 2.4 GHz chain. Writes PASS/FAIL into
-`../../boards.csv` and the full report into `../../results.jsonl`.
+1. Flash every board with the bridge firmware:
+   ```bash
+   ./flash.sh bridge
+   ```
+2. Set up the reference board once:
+   ```bash
+   python3 ranging.py anchor --id MAUWB-001
+   ```
+   Put it on a non-metal stand, antenna at the same height as the tag's, at
+   least 1 m from walls and metal. After this it can run from any USB charger.
+3. Tape-measure antenna to antenna, mark the tag's spot, and use the same mark
+   and the same direction for every board. Only the anchor and the board under
+   test are powered.
+4. Test each other board:
+   ```bash
+   python3 ranging.py tag --id MAUWB-002 --ref MAUWB-001 --distance 2.00 --tester HZ
+   ```
 
-The OLED test flashes all pixels white for ~1 s — **watch the screen**, dead rows and
-columns only show against full white — then draws vertical stripes to expose stuck
-columns.
+PASS means at least 10 distances in 15 s. The distance error is written down
+but not judged: these boards read about 50 to 60 cm long until calibrated. No
+reports at all usually means the anchor is off or out of reach.
 
-It also prints the **MAC address**, which is a free per-board serial number. With ten
-identical boards, that is how you prove you did not test number 3 twice.
+## Test 3: calibration, later
 
-**Not covered:** UWB ranging (needs two boards, phase B) and the battery charger.
-Makerfabs' battery demo reads GPIO4, but on this variant GPIO4 is I2C_SDA, so that pin
-is wrong here and the right one is undocumented — put a meter on the battery pads
-instead of guessing.
+Measure each board at 0.5, 1, 2, 3 and 5 m (one `ranging.py tag` run each)
+and fit `actual = m × reported + b` per board. The error belongs to the pair,
+not one board, so calibrate all of them against the same reference board, and
+write down that you did.
 
-## Phase B — ranging  (scripted; tested against a simulated board, not a real pair yet)
+## Recording
 
-Ranging cannot be tested on one board. One board is the fixed reference (anchor A0);
-every other board takes a turn as the tag (T0) against it.
+- Steps 1 to 7 of the Test Procedure (meter, supply, visual, short, power-up,
+  temperature, voltages) are done by hand and go straight into the board's row
+  of the sheet.
+- After Test 1, fill column S, "8 Function": Y for PASS, N for FAIL. Put the
+  MAC in the notes. It is the only way to tell ten identical boards apart.
+- The scripts also save every run by themselves: `selftest.py` to
+  `../../boards.csv` and `../../results.jsonl`, `ranging.py` to
+  `../../ranging.jsonl`. These files stay on the Mac and are not uploaded.
 
-```bash
-./flash.sh bridge                                     # every board, for this phase
-python3 ranging.py anchor --id ECE-0101               # once: make the reference
-python3 ranging.py tag --id ECE-0102 --ref ECE-0101 --distance 2.00 --tester HZ
-```
+## If something looks wrong
 
-`bridge/bridge.ino` makes the ESP32 a wire between USB and the STM32, so `ranging.py`
-sends the AT commands itself (Makerfabs AT Command Manual v1.1.2): `AT?`, `AT+RESTORE`,
-`AT+SETCFG`, `AT+SETCAP`, `AT+SETRPT=1`, `AT+SAVE`, `AT+RESTART`, then reads the
-settings back. Role and index are never compiled in, unlike Makerfabs' `esp32_at.ino`
-— one firmware for all ten. Before configuring anything it asks the bridge for the
-board's MAC and checks it against `boards.csv`; the wrong board on the port stops the run.
+Three things make a good board look dead:
 
-**Setup**
+1. Makerfabs' `esp32_at.ino` has the S3 pins switched on. Flashed unchanged,
+   the STM32 never answers. Use these pins:
 
-1. Reference anchor at one fixed spot for the whole batch: non-metallic support,
-   **antennas at the same height**, clear line of sight, at least 1 m from walls and
-   metal. Multipath will dominate anything you do on a cluttered lab bench and you
-   will blame the board. After `ranging.py anchor` it can run from any USB charger —
-   the role is saved in the module.
-2. Tape-measure antenna to antenna, mark the tag's spot, and use the same mark and
-   orientation for every board.
-3. Power only the anchor and the board under test. Every board under test is T0.
+   | Function | This board | ESP32-S3 version |
+   |---|---|---|
+   | STM32 reset | GPIO 32 | 16 |
+   | ESP32 receives from STM32 | 18 | 18 |
+   | ESP32 sends to STM32 | 19 | 17 |
+   | I2C SDA | 4 | 39 |
+   | I2C SCL | 5 | 38 |
 
-**What PASS means:** at least 10 distances to A0 in the 15 s window — the board ranges.
-That is the only gate. The offset (reported − tape) is recorded and printed beside the
-other boards measured against the same reference, but never judged: these boards read
-about half a metre long until calibrated (the review below measured 50–61 cm), and that
-is a calibration number, not a fault.
+2. PSRAM must be Enabled in the build. If it is off, every board reports 0
+   bytes. `flash.sh` sets it, so always flash with `flash.sh`.
+3. The board type must be "ESP32 Dev Module", not an S3 board.
 
-A FAIL with **no reports at all** is most often the anchor being off or out of reach,
-and the script says so. Check the anchor and re-run; a passing re-run clears the
-script's own entry in `boards.csv` (it never touches the self-test's entries).
+More:
 
-**Firmware differences it handles.** The range line changed between firmware versions:
-older ones end with `rssi:(...)` and slot *i* is anchor *i*; v1.1.6 ends with
-`ancid:(...)` and any slot can hold any anchor. `AT+SETCAP` took 2 fields before
-v1.1.1 and 3 after, so the script asks `AT+GETCAP?` first and answers in the same shape.
+- Battery charger: Makerfabs' demo reads GPIO4, but on this board GPIO4 is
+  I2C SDA. Measure the battery pads with a meter instead.
+- To find where a failing board breaks, use [`scope-card.html`](scope-card.html):
+  four oscilloscope checks (3.3 V rail, the ESP32 to STM32 serial line, the
+  STM32 reset line, the I2C bus). Sending `T` in the serial monitor reruns the
+  self-test so the scope has something to catch.
+- Ranging has only been tried on a simulated board. If the first real good
+  board fails, suspect the script first.
+- The ranging script handles both STM32 firmware versions (older ones end each
+  line with `rssi:`, v1.1.6 with `ancid:`).
 
-**Not confirmed on hardware yet**, so the first real pair tests the test, the way board
-1 did for the self-test: how long the module needs after `AT+RESTORE` and `AT+RESTART`,
-whether a tag with no anchor in reach prints empty reports or nothing, and whether the
-module echoes commands. If the first good board FAILs, suspect the script first.
+## All ten boards
 
-Every run, with all its raw readings, goes to `../../ranging.jsonl` (gitignored — it
-is lab equipment data).
+1. Flash and self-test all ten in one sitting, about 30 s each.
+2. Name them MAUWB-001 to MAUWB-010 and note each MAC.
+3. Run `python3 ../../analyze.py`. Three boards failing the same way is a batch
+   problem, not three coincidences.
+4. Run Test 2 on the ones that passed.
 
-## Phase C — calibration
+A powered USB hub can hold all ten at once.
 
-The honest situation: repeatability is excellent (published measurements put the
-position DRMS around 1–3 cm), but **absolute distance carries a per-board offset** that
-can be tens of centimetres. An independent review of this exact board fitted
-`actual = m × reported + b` and got m ≈ 1.0089, b ≈ −61.2 — a large constant term.
+## Details
 
-So: measure each board at several known distances (50 cm, 1 m, 2 m, 3 m, 5 m), fit a
-line, store `m` and `b` per board. One `ranging.py tag` run per distance collects the
-data; `ranging.jsonl` keeps every reading for the fit.
-
-**The caveat that matters:** the offset belongs to the *pair*, not to one board — both
-antenna delays add. Two honest options:
-
-- **Reference-board method (practical).** Pick one board as the reference and calibrate
-  the other nine against it. Fast, and fine as long as you always deploy with this set,
-  but it folds the reference's own delay into all nine numbers.
-- **Round-robin (correct).** Measure all pairs at known distances and least-squares
-  solve for individual per-board delays. With 10 boards that is 45 pairs — right, but
-  expensive by hand.
-
-Start with the reference method. Write down that you did, so nobody later mistakes
-those coefficients for absolute antenna delays.
-
-## Running all ten
-
-1. Flash `selftest.ino` to all ten first, in one sitting. Same IDE settings for all —
-   settings drift between sessions is a real source of fake failures.
-2. Label them `ECE-0101`..`ECE-0110` (or whatever the lab scheme turns out to be) and
-   record the MAC each one reports.
-3. `selftest.py --id ...` on each. ~30 s per board.
-4. `python3 ../../analyze.py` — with ten identical boards, a repeated signature is a
-   batch problem worth chasing, not ten coincidences.
-5. Phase B on the survivors: `./flash.sh bridge` on each, `ranging.py anchor` once on
-   the reference, then `ranging.py tag` on each of the others from the same mark.
-
-**Scaling note:** since the interface is USB, a powered 10-port hub tests all ten in
-one pass without touching anything. That is the whole fixture. No pogo pins.
+- OLED: SSD1306, 128×64, at I2C address 0x3C. ESP32 to STM32: 115200 baud, 8N1.
+- `bridge.ino` turns the ESP32 into a wire between USB and the STM32, so
+  `ranging.py` sends the commands itself (Makerfabs AT Command Manual v1.1.2):
+  `AT?`, `AT+RESTORE`, `AT+SETCFG`, `AT+SETCAP`, `AT+SETRPT=1`, `AT+SAVE`,
+  `AT+RESTART`, then reads the settings back. Role and index are set by the
+  script, so one firmware serves all ten boards.
+- `AT+SETCAP` takes 2 fields before firmware v1.1.1 and 3 after; the script asks
+  `AT+GETCAP?` first and answers in the same form. In older firmware slot *i*
+  is anchor *i*; in v1.1.6 any slot can hold any anchor.
+- Still unknown until a real pair runs: how long the module needs after
+  `AT+RESTORE` and `AT+RESTART`, whether a tag with no anchor prints empty
+  reports or nothing, and whether the module echoes commands.
+- A passing ranging re-run clears `ranging.py`'s own FAIL in `boards.csv`; it
+  never touches the self-test's entries.
+- Calibration numbers: repeatability is about 1 to 3 cm. An independent review
+  of this board fitted m ≈ 1.0089 and b ≈ −61.2 cm. The more correct but slower
+  alternative to one reference board is to measure all 45 pairs and solve for
+  each board's delay by least squares.
