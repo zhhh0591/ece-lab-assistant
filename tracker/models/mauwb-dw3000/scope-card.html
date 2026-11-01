@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MaUWB_DW3000 示波器检查卡 · Scope check card</title>
+<!--
+  One printed page for the scope checks A-D on a MaUWB_DW3000 board.
+  Print: open in Chrome, Cmd-P, paper Letter, scale 100%, turn off
+  "Headers and footers". Settings and facts come from the DSO6000 manual in
+  lab-web/site/static/docs/ and from selftest/selftest.ino -- change them
+  there first if either changes.
+-->
+<style>
+  @page { size: letter; margin: 0.3in; }
+  * { box-sizing: border-box; }
+  html { background: #fff; }
+  body {
+    margin: 0; color: #000; background: #fff;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Helvetica Neue", Arial, sans-serif;
+    font-size: 7pt; line-height: 1.22;
+  }
+  @media screen { body { max-width: 7.9in; margin: 0.3in auto; padding: 0 16px; } }
+  h1 { font-size: 11.5pt; margin: 0; }
+  h1 span { font-weight: normal; font-size: 9pt; }
+  h2 { font-size: 8.2pt; margin: 0 0 2pt; padding: 1pt 4pt; background: #e6e6e6; }
+  h2 span { font-weight: normal; }
+  p { margin: 1.2pt 0; }
+  code { font-size: 6.8pt; }
+  .meta { margin: 2pt 0 4pt; }
+  .blank { display: inline-block; min-width: 3.4em; border-bottom: 0.6pt solid #000; height: 1em; }
+  .blank.w { min-width: 7em; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5pt 8pt; }
+  .box { border: 0.7pt solid #000; padding: 2.5pt 4pt 3pt; break-inside: avoid; }
+  table { border-collapse: collapse; width: 100%; margin: 1.5pt 0; }
+  th, td { border: 0.5pt solid #777; padding: 0.6pt 2.5pt; text-align: left; vertical-align: top; }
+  th { background: #f2f2f2; font-weight: bold; white-space: nowrap; }
+  .checks { list-style: none; padding-left: 0; margin: 1pt 0; }
+  .checks li { margin: 0.3pt 0; }
+  .checks li::before { content: "☐ "; }
+  .key { border: 1.2pt solid #000; padding: 1.5pt 4pt; margin-top: 2pt; font-weight: bold; }
+  .good::before { content: "✓ 好 Good："; font-weight: bold; }
+  .bad::before  { content: "✗ 坏 Bad："; font-weight: bold; }
+  .rec { border-top: 0.5pt dashed #000; margin-top: 2pt; padding-top: 1.5pt; }
+  .rec::before { content: "记录 Record："; font-weight: bold; }
+  svg { display: block; width: 100%; height: auto; margin: 1.5pt 0; }
+  svg text { font-family: inherit; font-size: 7px; }
+  .foot { margin-top: 4pt; font-size: 6.6pt; }
+  .foot p { margin: 0.8pt 0; }
+</style>
+</head>
+<body>
+
+<h1>MaUWB_DW3000 示波器检查卡 <span>Oscilloscope check card · DSO6012A</span></h1>
+<div class="meta">
+  编号 ID <span class="blank"></span>
+  MAC <span class="blank w"></span>
+  日期 Date <span class="blank"></span>
+  测试人 Tester <span class="blank"></span>
+  固件 Firmware：selftest（<code>./flash.sh</code>）
+</div>
+
+<div class="grid">
+
+  <div class="box">
+    <h2>开始前 <span>Before you start</span></h2>
+    <ul class="checks">
+      <li>探头开关和通道菜单都是 10:1 · Probe 10:1 on both</li>
+      <li>输入阻抗 Imped = 1 MΩ（不是 50 Ω · not 50 Ω）</li>
+      <li>探头补偿：方波顶部平 · Probe comp: flat top（manual p.54）</li>
+      <li>两个地夹都只夹 GND · Both ground clips on GND only</li>
+      <li>只用钩子头夹排针或测试点 · Hook tips on headers only</li>
+      <li>串口监视器 115200，发 <code>T</code> 回车 = 重跑自检 · send T to rerun</li>
+      <li>跑 <code>selftest.py</code> 前关掉串口监视器 · Close the monitor first</li>
+    </ul>
+    <div class="key">只发生一次的事：先 [Mode/Coupling] → Mode = Normal，再按 [Single]。
+      Auto 下按 Single 会强制触发（manual p.84–85）· One-time events: Normal first, then [Single].</div>
+  </div>
+
+  <div class="box">
+    <h2>测试点 <span>Test points（位置待确认 confirm with the technician）</span></h2>
+    <table>
+      <tr><th>信号 Signal</th><th>GPIO</th><th>板上位置 Where on the board</th></tr>
+      <tr><td>3.3 V 电源轨 rail</td><td>—</td><td></td></tr>
+      <tr><td>GND 地</td><td>—</td><td></td></tr>
+      <tr><td>UART TX：ESP32 → STM32</td><td>19</td><td></td></tr>
+      <tr><td>UART RX：STM32 → ESP32</td><td>18</td><td></td></tr>
+      <tr><td>STM32 复位 reset</td><td>32</td><td></td></tr>
+      <tr><td>I2C SCL 时钟 clock</td><td>5</td><td></td></tr>
+      <tr><td>I2C SDA 数据 data</td><td>4</td><td></td></tr>
+    </table>
+    <p>不要碰 Don't probe：晶振 crystals · 天线 antennas · DW3000（6.5–8 GHz，示波器看不了）</p>
+  </div>
+
+  <!-- ===================== A ===================== -->
+  <div class="box">
+    <h2>A · 3.3 V 电源轨 <span>Power rail — 供电稳、不欠压重启 · no brownout</span></h2>
+    <p>接线 Probe：CH1 → 3.3 V，地 → GND。A2 换短地弹簧 ground spring。</p>
+    <table>
+      <tr><th></th><th>A1 上电 Power-up</th><th>A2 跌落 Droop</th></tr>
+      <tr><th>耦合 Coupling</th><td>DC</td><td>AC（3.5 Hz 高通 high-pass）</td></tr>
+      <tr><th>每格电压 V/div</th><td>1 V</td><td>50 mV，BW Limit 开 on（≈25 MHz）</td></tr>
+      <tr><th>每格时间 Time/div</th><td>先 5 ms start</td><td>先 1 ms start</td></tr>
+      <tr><th>触发 Trigger</th><td>上升沿 rising 1.5 V</td><td>下降沿 falling −30 mV</td></tr>
+      <tr><th>模式 Mode</th><td>Normal + [Single]，再插 USB</td><td>Normal，发 T（WiFi 扫描）</td></tr>
+    </table>
+    <svg viewBox="0 0 300 50" aria-label="A1 好、A1 坏、A2 跌落的示意波形">
+      <rect x="1" y="1" width="92" height="36" fill="none" stroke="#999" stroke-width="0.6"/>
+      <path d="M3 32 H18 Q24 8 36 8 H91" fill="none" stroke="#000" stroke-width="1.3"/>
+      <rect x="104" y="1" width="92" height="36" fill="none" stroke="#999" stroke-width="0.6"/>
+      <path d="M106 32 H114 Q118 8 125 8 H132 V27 Q136 8 142 8 H149 V27 Q153 8 159 8 H166 V27 Q170 8 176 8 H194" fill="none" stroke="#000" stroke-width="1.3"/>
+      <rect x="207" y="1" width="92" height="36" fill="none" stroke="#999" stroke-width="0.6"/>
+      <path d="M209 17 H228 L230 31 L233 18 H252 L254 28 L257 17 H274 L276 25 L279 17 H297" fill="none" stroke="#000" stroke-width="1.3"/>
+      <text x="47" y="47" text-anchor="middle">A1 好：一次升到 3.3 V</text>
+      <text x="150" y="47" text-anchor="middle">A1 坏：反复重启 restarts</text>
+      <text x="253" y="47" text-anchor="middle">A2：WiFi 发射时下跌 dips</text>
+    </svg>
+    <p class="good">A1 一次升到约 3.3 V 并稳住 · rises once and holds。A2 跌落小，3.3 V 减最大跌落仍 ≥ 3.0 V · dips stay small。</p>
+    <p class="bad">A1 升了又掉、反复 = 板子在反复重启。A2 3.3 V 减最大跌落 &lt; 3.0 V（ESP32-WROVER-B 数据手册下限 datasheet min）。</p>
+    <p>不触发 No trigger：A1 → 3.3 V 没升过 1.5 V，先用万用表查 5 V。A2 → 跌落 &lt; 30 mV（好），改 −15 mV 再量。</p>
+    <p class="rec">上升 rise <span class="blank"></span> ms · 反复 restarts Y / N · 最大跌落 max dip <span class="blank"></span> mV pk-pk · 触发电平 level <span class="blank"></span> mV</p>
+  </div>
+
+  <!-- ===================== B ===================== -->
+  <div class="box">
+    <h2>B · 串口 UART <span>— AT? 发出去，STM32 回话 · AT? out, reply back</span></h2>
+    <p>接线 Probe：CH1 → GPIO19（TX），CH2 → GPIO18（RX）</p>
+    <table>
+      <tr><th>耦合 Coupling</th><td>DC（两路 both）</td><th>每格电压 V/div</th><td>2 V，上下错开</td></tr>
+      <tr><th>每格时间 Time/div</th><td>200 µs；看位 10 µs</td><th>触发 Trigger</th><td>CH1 下降沿 1.6 V</td></tr>
+      <tr><th>模式 Mode</th><td colspan="3">Normal，发 T。[Single] 定住 AT? 那张（2 s 后的 AT+CFG 会盖掉它）</td></tr>
+    </table>
+    <svg viewBox="0 0 300 38" aria-label="字母 A 的串口波形：起始位、D0 到 D7、停止位">
+      <path d="M2 5 H22 V22 H46 V5 H70 V22 H190 V5 H214 V22 H238 V5 H298" fill="none" stroke="#000" stroke-width="1.3"/>
+      <text x="34" y="33" text-anchor="middle">start</text>
+      <text x="58" y="33" text-anchor="middle">D0=1</text>
+      <text x="130" y="33" text-anchor="middle">D1–D5 = 0</text>
+      <text x="202" y="33" text-anchor="middle">D6=1</text>
+      <text x="226" y="33" text-anchor="middle">D7=0</text>
+      <text x="250" y="33" text-anchor="middle">stop</text>
+      <text x="272" y="18" text-anchor="middle">字母 A</text>
+    </svg>
+    <p>115200 baud → 1 位 bit = <b>8.68 µs</b>。AT?\r\n = 5 字符 ≈ 0.43 ms。A 的起始位只有 1 位宽 → −Width ≈ 8.7 µs。</p>
+    <p class="good">CH1 有 AT?、位宽 ≈ 8.7 µs，随后 CH2 有回复；高电平 ≈ 3.3 V，低电平 ≈ 0 V · both directions work。</p>
+    <table>
+      <tr><th>看到 You see</th><th>说明 → 下一步 Meaning → next</th></tr>
+      <tr><td>CH1 一直 3.3 V</td><td>ESP32 没发 → 查固件和引脚（README 陷阱 1）</td></tr>
+      <tr><td>CH1 一直 0 V</td><td>线被拉到地 → 断电量对地电阻</td></tr>
+      <tr><td>CH1 有、CH2 平</td><td>STM32 没回 no reply → 测 C</td></tr>
+      <tr><td>两路都有，但乱码</td><td>速度对不上 → 量位宽 bit width</td></tr>
+      <tr><td>高电平约 2 V / 边沿圆</td><td>线上有负载 loaded → 记下，问技术员</td></tr>
+    </table>
+    <p class="rec">位宽 bit <span class="blank"></span> µs · CH1 高 <span class="blank"></span> V · CH2 高 <span class="blank"></span> V · 有回复 reply Y / N</p>
+  </div>
+
+  <!-- ===================== C ===================== -->
+  <div class="box">
+    <h2>C · STM32 复位线 <span>Reset, GPIO32 — ESP32 能控制复位 · ESP32 drives reset</span></h2>
+    <p>接线 Probe：CH1 → GPIO32（复位 reset），CH2 → GPIO19（TX）</p>
+    <table>
+      <tr><th>每格电压 V/div</th><td>2 V（两路 both）</td><th>每格时间 Time/div</th><td>500 ms（屏幕 5 s）</td></tr>
+      <tr><th>水平位置 Position</th><td>触发点移到左边第 1 格</td><th>触发 Trigger</th><td>CH1 下降沿 1.6 V</td></tr>
+      <tr><th>模式 Mode</th><td colspan="3">Normal + [Single]，发 T。量脉冲宽度：改 20 ms/div，Quick Meas → −Width</td></tr>
+    </table>
+    <svg viewBox="0 0 300 54" aria-label="复位线 0 秒拉低 50 毫秒，1.55 秒发 AT?，3.55 秒发 AT+CFG">
+      <text x="2" y="8">CH1 reset</text>
+      <path d="M40 4 H60 V15 H63 V4 H298" fill="none" stroke="#000" stroke-width="1.3"/>
+      <text x="68" y="14">← 50 ms 低 low</text>
+      <text x="2" y="30">CH2 TX</text>
+      <path d="M40 24 H153 V35 H155 V24 H253 V35 H255 V24 H298" fill="none" stroke="#000" stroke-width="1.3"/>
+      <path d="M60 40 H298" stroke="#999" stroke-width="0.6"/>
+      <text x="60" y="49" text-anchor="middle">0 s</text>
+      <text x="154" y="49" text-anchor="middle">1.55 s AT?</text>
+      <text x="254" y="49" text-anchor="middle">3.55 s AT+CFG</text>
+    </svg>
+    <p class="good">50 ms 低脉冲，然后一直高；约 1.55 s 后 CH2 出现 AT? · 50 ms low, then AT? 1.55 s later。</p>
+    <p class="bad">不触发 = 线没动 → 查引脚号。一直低 = STM32 被按在复位 → 查短路。脉冲正常但 1.55 s 没命令 → 回去看 B。</p>
+    <p><b>注意 Note：</b>AT 手册 §2.6 说要拉低约 3 s 才复位。50 ms 只证明线被拉低，不证明 STM32 真的重启了 · proves the pin moves, not a restart。bridge 固件一直保持高电平，所以 C 用自检固件测。</p>
+    <p class="rec">低脉冲 low pulse <span class="blank"></span> ms · AT? 在复位后 after reset <span class="blank"></span> s</p>
+  </div>
+
+  <!-- ===================== D ===================== -->
+  <div class="box">
+    <h2>D · I2C → OLED（0x3C）<span>— OLED 在线并应答 · the OLED answers</span></h2>
+    <p>接线 Probe：CH1 → SCL（GPIO5），CH2 → SDA（GPIO4）</p>
+    <table>
+      <tr><th>每格电压 V/div</th><td>2 V（两路）</td><th>每格时间 Time/div</th><td>20 µs @100 kHz · 5 µs @400 kHz · 量上升 200 ns</td></tr>
+      <tr><th>触发 Trigger</th><td colspan="3">[More] → I2C：SCL = CH1，SDA = CH2，地址帧 address 0x3C。没有这个菜单就用 CH2 下降沿</td></tr>
+      <tr><th>模式 Mode</th><td colspan="3">Normal + [Single]，发 T（先抓到扫描 scan）；再按 [Run] 看写屏 display writes</td></tr>
+    </table>
+    <svg viewBox="0 0 300 48" aria-label="I2C 地址 0x3C 写入：起始、地址 0111100、写、应答、停止">
+      <text x="2" y="10">SCL</text>
+      <path d="M24 4 H36 V16 H46 V4 H56 V16 H66 V4 H76 V16 H86 V4 H96 V16 H106 V4 H116 V16 H126 V4 H136 V16 H146 V4 H156 V16 H166 V4 H176 V16 H186 V4 H196 V16 H206 V4 H216 V16 H226 V4 H238" fill="none" stroke="#000" stroke-width="1.3"/>
+      <text x="2" y="30">SDA</text>
+      <path d="M24 22 H31 V34 H58 V22 H138 V34 H231 V22 H238" fill="none" stroke="#000" stroke-width="1.3"/>
+      <text x="31" y="44" text-anchor="middle">S</text>
+      <text x="111" y="44" text-anchor="middle">011 1100（0x3C）</text>
+      <text x="191" y="44" text-anchor="middle">W</text>
+      <text x="211" y="44" text-anchor="middle">ACK</text>
+      <text x="231" y="44" text-anchor="middle">P</text>
+      <text x="244" y="22">第 9 个时钟</text>
+      <text x="244" y="31">SDA 低 = ACK</text>
+    </svg>
+    <table>
+      <tr><th>上升时间 Rise（UM10204，30–70%）</th><td>≤ 1000 ns @100 kHz · ≤ 300 ns @400 kHz → 按 300 ns 算</td></tr>
+      <tr><th>低电平 Low level</th><td>≤ 0.4 V</td></tr>
+    </table>
+    <p>示波器默认量 10–90%，读数偏大 reads high。稍微超标：把阈值 thresholds 改成 30% / 70% 再量。</p>
+    <p class="good">第 9 个时钟 SDA 低（ACK）；上升时间和低电平都在上表以内 · ACK, rise time and low level in range。</p>
+    <p class="bad">第 9 个时钟 SDA 高（NACK）→ OLED 没回答，查 OLED 的 VCC、GND。SCL 没时钟 → 查引脚 4、5。一直低 → 总线卡住或短路。鲨鱼鳍、超标 → 上拉太弱 weak pull-up。</p>
+    <p class="rec">SCL 扫描 scan <span class="blank"></span> kHz · 写屏 display <span class="blank"></span> kHz · 上升 rise SCL <span class="blank"></span> / SDA <span class="blank"></span> ns · ACK Y / N · 低 low <span class="blank"></span> V</p>
+  </div>
+
+</div>
+
+<div class="foot">
+  <p><b>判定 Verdict：</b>实验室还没定标准，先在一块已知好的板上记一套基准，其他板跟它比 · a known-good board is the baseline。
+    <b>存图 Save：</b>U 盘插前面板，[Save/Recall]（manual p.255），或手机拍；文件名如 MAUWB-001_A1.png。实验室数据，不放公开日志 · keep it private。</p>
+  <p><b>出处 Sources：</b>DSO6000 说明书 InfiniiVision User's Guide（<code>lab-web/site/static/docs/dso6000-scope-manual.pdf</code>）p.54 探头补偿，p.84–85 触发模式，BW Limit ≈25 MHz，AC 3.5 Hz，测量阈值 10/50/90%。NXP UM10204（I2C）。ESP32-WROVER-B 数据手册。<code>selftest/selftest.ino</code>（时间顺序，按 T 重跑）。</p>
+</div>
+
+</body>
+</html>
