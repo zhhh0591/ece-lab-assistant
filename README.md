@@ -37,3 +37,4 @@ One file per day in `log/`.
 - [2026-10-29](log/2026-10-29.md) - learning to read a schematic, the XIAO's power section
 - [2026-10-30](log/2026-10-30.md) - the USB-C connector contacts and the VBUS net
 - [2026-10-31](log/2026-10-31.md) - why power into the 5V pin reaches the board under test
+- [2026-11-01](log/2026-11-01.md) - a low 5 V reading on the second UWB board
